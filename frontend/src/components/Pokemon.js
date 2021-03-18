@@ -1,11 +1,11 @@
 import React from 'react'
-const Pokemon = ({ pokeData }) => {
+const Pokemon = ({ pokeDataForState }) => {
     return (
         <div>
-            <p>Name: {pokeData.pokeName}</p>
-            <p>Types: {pokeData.pokeTypes}</p>
-            <p>Height: {pokeData.pokeHeight}</p>
-            <p>Weight: {pokeData.pokeWeight}</p>
+            <p>Name: {pokeDataForState.pokeName}</p>
+            <p>Types: {pokeDataForState.pokeTypes}</p>
+            <p>Height: {pokeDataForState.pokeHeight}</p>
+            <p>Weight: {pokeDataForState.pokeWeight}</p>
         </div>
     )
 }

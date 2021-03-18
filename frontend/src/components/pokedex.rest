@@ -2,3 +2,9 @@ https://pokeapi.co/api/v2/type/ground
 
 ###
 https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118
+
+###
+https://pokeapi.co/api/v2/pokemon/pikachu
+
+###
+https://pokeapi.co/api/v2/pokemon/
