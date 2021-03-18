@@ -4,10 +4,26 @@ import PokeFilter from './components/PokeFilter';
 import Pokemon from './components/Pokemon'
 
 function App() {
-
   const [pokemonUrls, pokemonUrlsState] = useState([])
   const [pokemonList, setpokemonList] = useState('');
   const [value, setValue] = useState('');
+  const [catchState, setCatchState] = useState([]);
+  const [catchButton, setCatchButton] = useState('catch');
+  function catchOrRelease(catchState, pokemon) {
+    if (catchState[pokemon]) {
+      catchState[pokemon] = false;
+      setCatchState({ ...catchState })
+      setCatchButton('catch')
+    } else {
+      catchState[pokemon] = true;
+      // catchState.map(() => {
+
+      // })
+      setCatchState({ ...catchState })
+      setCatchButton('release')
+    }
+
+  }
   const changeValue = (e) => {
     const newValue = e.target.value;
     setValue(newValue)
@@ -34,7 +50,12 @@ function App() {
         const pokeHeight = pokeData.height;
         const frontImage = 'url("' + pokeData.sprites.front_default + '")';
         const backImage = 'url("' + pokeData.sprites.back_default + '")';
-
+        if (catchState[pokeName]) {
+          setCatchButton('release');
+        }
+        else {
+          setCatchButton('catch');
+        }
         const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage };
         console.log(frontImage);
         setPokeDataForState(pokeDataForState);
@@ -68,7 +89,7 @@ function App() {
     <div className="App">
       <h1>Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
-      <Pokemon pokeDataForState={pokeDataForState} pokemonList={pokemonList} spreadTypes={spreadTypes} />
+      <Pokemon pokeDataForState={pokeDataForState} pokemonList={pokemonList} setCatchState={setCatchState} spreadTypes={spreadTypes} catchState={catchState} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} />
       {/* <TypePokemon /> */}
     </div>
   );

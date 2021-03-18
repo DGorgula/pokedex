@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes }) => {
+const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, catchState, setCatchState, setCatchButton, catchButton }) => {
 
     // const [image, setImage] = useState(pokeDataForState.frontImage);
     // if (image && !flag) {
@@ -14,7 +14,7 @@ const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes }) => {
 
 
 
-
+    console.log(catchState);
 
     return (
         <div className="stats">
@@ -27,6 +27,7 @@ const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes }) => {
                 backgroundImage: `${pokeDataForState.frontImage}`
             }} ></div>
             <ul>{pokemonList}</ul>
+            <button className="Catch-release" onClick={() => { catchOrRelease(catchState, pokeDataForState.pokeName) }}>{catchButton}</button>
         </div>
     )
 }
