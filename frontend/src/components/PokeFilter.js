@@ -8,7 +8,7 @@ const PokeFilter = ({ changeValue, getPokemonData, value }) => {
         <div className="filter-div">
             <input className="filter" placeholder="Enter a Pokemon" type='text' onChange={changeValue} />
             <p>{value}</p>
-            <button className="filter-button" onClick={getPokemonData(value)} >Go</button>
+            <button className="filter-button" onClick={() => { getPokemonData(value) }} >Go</button>
         </div >
     )
 }
@@ -18,4 +18,5 @@ export default PokeFilter
 
 
 //          find by type:
+// https://pokeapi.co/api/v2/type/ground
 // fetch >> data.names
