@@ -1,74 +1,68 @@
 
-import PokeFilter from './components/PokeFilter'
 function App() {
 
+  fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118')
+    .then(response => response.json()
+      .then(data => {
+        data = data.results;
 
-  const pokeObj = {
-    "abilities": [
-    ],
-    "base_experience": 179,
-    "forms": [
-    ],
-    "game_indices": [
-    ],
-    "height": 92,
-    "held_items": [
-      {
-        "item": {
-        },
-        "version_details": [
-        ]
-      }
-    ],
-    "id": 208,
-    "is_default": true,
-    "location_area_encounters": "https://pokeapi.co/api/v2/pokemon/208/encounters",
-    "moves": [
-    ],
-    "name": "steelix",
-    "order": 143,
-    "past_types": [],
-    "species": {
-    },
-    "sprites": {
-    },
-    "stats": [
-    ],
-    "types": [
-      {
-        "slot": 1,
-        "type": {
-          "name": "steel",
-          "url": "https://pokeapi.co/api/v2/type/9/"
-        }
-      },
-      {
-        "slot": 2,
-        "type": {
-          "name": "ground",
-          "url": "https://pokeapi.co/api/v2/type/5/"
-        }
-      }
-    ],
-    "weight": 4000
-  }
-  const [poke, setstate] = useState(initialState)
-  const pokeName = pokeObj.name;
-  const pokeTypes = pokeObj.types.map(type => {
-    const typeName = type.type.name
-    return `${typeName} `;
-  });
-  const pokeWeight = pokeObj.weight;
-  const pokeHeight = pokeObj.height;
-  const pokeData = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight };
-  console.log(pokeData);
+        const pokemons = {};
+        data.map((val) => {
+          return (
+            pokemons[val.name] = val.url
+          )
+        })
 
-  return (
-    <div className="App">
-      <h1>Pokedex</h1>
-      <PokeFilter pokeData={pokeData} />
-    </div>
-  );
+
+        console.log(pokemons);
+
+        // const pokemon = pokeObj.find(pokemon => pokemon.name === name);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // const [pokeData, pokeObjstate] = useState(pokeObj)
+        // const pokeName = pokeData.name;
+        // const pokeTypes = pokeData.types.map(type => {
+        //   const typeName = type.type.name
+        //   return `${typeName} `;
+        // });
+        // const pokeWeight = pokeData.weight;
+        // const pokeHeight = pokeData.height;
+        // const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight };
+        // console.log(pokeData);
+
+        // po
+
+        return (
+          <div className="App">
+            <h1>Pokedex</h1>
+          </div>
+        );
+      }))
+    .catch(error => console.log(error));
+
 }
 
 export default App;
+
+//   <PokeFilter pokeData={pokeData} /> 
+// import PokeFilter from './components/PokeFilter'

@@ -1,11 +1,11 @@
-import React from 'react'
+// import React from 'react'
 import Pokemon from './Pokemon.js'
 
 const PokeFilter = ({ pokeData }) => {
     console.log({ pokeData })
     return (
         <div className="filter-div">
-            <input className="filter" placeholder="Enter a Pokemon" type='text' value={ } />
+            <input className="filter" placeholder="Enter a Pokemon" type='text' />
             <button className="filter-button">Go</button>
             <Pokemon pokeData={pokeData} />
         </div>
