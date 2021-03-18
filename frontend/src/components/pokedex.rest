@@ -1,0 +1,4 @@
+https://pokeapi.co/api/v2/type/ground
+
+###
+https://pokeapi.co/api/v2/pokemon/208/
