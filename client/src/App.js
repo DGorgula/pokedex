@@ -1,25 +1,35 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import PokeFilter from './components/PokeFilter';
-import Pokemon from './components/Pokemon'
+import Pokemon from './components/Pokemon';
+import CatchedPokemons from './components/CatchedPokemons';
 
 function App() {
-  const [pokemonList, setpokemonList] = useState('');
+  const [pokemonTypeList, setpokemonTypeList] = useState('');
   const [value, setValue] = useState('');
   const [catchState, setCatchState] = useState([]);
+  const [catchedPokemons, setCatchedPokemons] = useState([]);
   const [catchButton, setCatchButton] = useState('catch');
-  function catchOrRelease(catchState, pokemon) {
-    if (catchState[pokemon]) {
-      catchState[pokemon] = false;
-      setCatchState({ ...catchState })
-      setCatchButton('catch')
-    } else {
-      catchState[pokemon] = true;
-      setCatchState({ ...catchState })
-      setCatchButton('release')
-    }
-
+  function catchedPokemonList(setCatchState) {
+    axios.get(`http://localhost:3005/api/collection`).then(({ data }) => {
+      console.log(data);
+      // const x = data.frontImage;
+      // const y = data.pokeName;
+    })
   }
+  catchedPokemonList(setCatchState);
+  function catchOrRelease(pokemonName) {
+    console.log(pokemonName);
+    axios.post(`http://localhost:3005/api/collection/catch`, { name: pokemonName })
+      .then(({ data }) => {
+        console.log(data);
+        setCatchButton(data.catchButton);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   const changeValue = (e) => {
     const newValue = e.target.value;
     setValue(newValue)
@@ -28,37 +38,22 @@ function App() {
   const [pokeDataForState, setPokeDataForState] = useState(firstpokeDataForState);
 
   const getPokemonData = (value) => {
-    setpokemonList('')
+    setpokemonTypeList('')
     if (!value) {
       return;
     }
-    const bla = value.toLowerCase();
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${bla}`)
+    const pokeName = value.toLowerCase();
+    axios.get(`http://localhost:3005/api/pokemon/${pokeName}`)
       .then(({ data }) => {
-        const pokeData = data;
-        const pokeName = pokeData.name;
-        const pokeTypes = pokeData.types.map(type => {
-          const typeName = type.type.name;
-          return `${typeName} `;
-        });
-        const pokeWeight = pokeData.weight;
-        const pokeHeight = pokeData.height;
-        const frontImage = 'url("' + pokeData.sprites.front_default + '")';
-        const backImage = 'url("' + pokeData.sprites.back_default + '")';
-        if (catchState[pokeName]) {
-          setCatchButton('release');
-        }
-        else {
-          setCatchButton('catch');
-        }
-        const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage };
-        setPokeDataForState(pokeDataForState);
+        setCatchButton(data.catchButton);
+        setPokeDataForState(data);
       })
       .catch(error => {
         console.log(error);
 
       });
   }
+
   const [image, setImage] = useState(pokeDataForState.frontImage);
 
 
@@ -71,11 +66,11 @@ function App() {
 
 
   function showTypePokemons(type) {
-    axios.get(`https://pokeapi.co/api/v2/type/${type}`).then(({ data }) => {
-      const pokemonTypeList = data.pokemon.map((object, i) => {
-        return (<li key={i} onClick={() => getPokemonData(object.pokemon.name)}>{object.pokemon.name}</li>)
+    axios.get(`http://localhost:3005/api/${type}`).then(({ data }) => {
+      const pokemonTypeList = data.map((pokeName, i) => {
+        return (<li key={i} onClick={() => getPokemonData(pokeName)}>{pokeName}</li>)
       })
-      setpokemonList(pokemonTypeList);
+      setpokemonTypeList(pokemonTypeList);
     })
   }
   function spreadTypes(types) {
@@ -92,7 +87,8 @@ function App() {
     <div className="App">
       <h1>Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
-      <Pokemon pokeDataForState={pokeDataForState} pokemonList={pokemonList} setCatchState={setCatchState} spreadTypes={spreadTypes} catchState={catchState} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
+      <Pokemon pokeDataForState={pokeDataForState} pokemonTypeList={pokemonTypeList} spreadTypes={spreadTypes} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
+      <CatchedPokemons catchedPokemons={catchedPokemons} setCatchedPokemons={setCatchedPokemons} setCatchState={setCatchState} catchState={catchState} />
     </div>
   );
 

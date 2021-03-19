@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, catchState, catchButton, setFrontImage, image, setImage }) => {
+const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrRelease, catchState, catchButton, setFrontImage, image, setImage }) => {
 
     if (pokeDataForState.frontImage) {
         setFrontImage(setImage, image, pokeDataForState.frontImage, pokeDataForState.backImage);
@@ -15,8 +15,9 @@ const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, c
                 height: '96px', width: '96px',
                 backgroundImage: `${image || pokeDataForState.frontImage}`
             }} ></div>
-            <ul>{pokemonList}</ul>
-            <button className="Catch-release" onClick={() => { catchOrRelease(catchState, pokeDataForState.pokeName) }}>{catchButton}</button>
+            <ul>{pokemonTypeList}</ul>
+            <button className="Catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName) }}>{catchButton}</button>
+
         </div>
     )
 }
