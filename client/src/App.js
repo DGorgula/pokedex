@@ -1,10 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PokeFilter from './components/PokeFilter';
 import Pokemon from './components/Pokemon'
 
 function App() {
-  const [pokemonUrls, pokemonUrlsState] = useState([])
   const [pokemonList, setpokemonList] = useState('');
   const [value, setValue] = useState('');
   const [catchState, setCatchState] = useState([]);
@@ -16,9 +15,6 @@ function App() {
       setCatchButton('catch')
     } else {
       catchState[pokemon] = true;
-      // catchState.map(() => {
-
-      // })
       setCatchState({ ...catchState })
       setCatchButton('release')
     }
@@ -39,7 +35,6 @@ function App() {
     const bla = value.toLowerCase();
     axios.get(`https://pokeapi.co/api/v2/pokemon/${bla}`)
       .then(({ data }) => {
-        console.log(data);
         const pokeData = data;
         const pokeName = pokeData.name;
         const pokeTypes = pokeData.types.map(type => {
@@ -57,7 +52,6 @@ function App() {
           setCatchButton('catch');
         }
         const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage };
-        console.log(frontImage);
         setPokeDataForState(pokeDataForState);
       })
       .catch(error => {
@@ -65,11 +59,20 @@ function App() {
 
       });
   }
+  const [image, setImage] = useState(pokeDataForState.frontImage);
+
+
+  function setFrontImage(setImage, image, frontImage, backImage) {
+    if (image !== frontImage && image !== backImage) {
+      setImage(frontImage);
+    }
+  }
+
+
 
   function showTypePokemons(type) {
     axios.get(`https://pokeapi.co/api/v2/type/${type}`).then(({ data }) => {
       const pokemonTypeList = data.pokemon.map((object, i) => {
-        console.log(object);
         return (<li key={i} onClick={() => getPokemonData(object.pokemon.name)}>{object.pokemon.name}</li>)
       })
       setpokemonList(pokemonTypeList);
@@ -89,8 +92,7 @@ function App() {
     <div className="App">
       <h1>Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
-      <Pokemon pokeDataForState={pokeDataForState} pokemonList={pokemonList} setCatchState={setCatchState} spreadTypes={spreadTypes} catchState={catchState} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} />
-      {/* <TypePokemon /> */}
+      <Pokemon pokeDataForState={pokeDataForState} pokemonList={pokemonList} setCatchState={setCatchState} spreadTypes={spreadTypes} catchState={catchState} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
     </div>
   );
 

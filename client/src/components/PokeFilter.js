@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import Pokemon from './Pokemon.js'
+import React from 'react'
 
 const PokeFilter = ({ changeValue, getPokemonData, value }) => {
 
@@ -12,9 +11,3 @@ const PokeFilter = ({ changeValue, getPokemonData, value }) => {
 }
 
 export default PokeFilter
-
-
-
-//          find by type:
-// https://pokeapi.co/api/v2/type/ground
-// fetch >> data.names

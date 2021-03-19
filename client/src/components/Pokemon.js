@@ -1,20 +1,9 @@
 import React, { useState } from 'react'
-import axios from 'axios';
-const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, catchState, setCatchState, setCatchButton, catchButton }) => {
+const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, catchState, catchButton, setFrontImage, image, setImage }) => {
 
-    // const [image, setImage] = useState(pokeDataForState.frontImage);
-    // if (image && !flag) {
-    //     setImage(pokeDataForState.frontImage);
-    //     flag = true;
-    // }
-    // pokeDataForState.backImage
-    // pokeDataForState.frontImage
-
-    // onMouseOver={() => setImage(pokeDataForState.backImage)} 
-
-
-
-    console.log(catchState);
+    if (pokeDataForState.frontImage) {
+        setFrontImage(setImage, image, pokeDataForState.frontImage, pokeDataForState.backImage);
+    }
 
     return (
         <div className="stats">
@@ -22,9 +11,9 @@ const Pokemon = ({ pokeDataForState, pokemonList, spreadTypes, catchOrRelease, c
             <p>Types: {spreadTypes(pokeDataForState.pokeTypes)}</p>
             <p>Height: {pokeDataForState.pokeHeight}</p>
             <p>Weight: {pokeDataForState.pokeWeight}</p>
-            <div style={{
+            <div onMouseOver={() => setImage(pokeDataForState.backImage)} onMouseLeave={() => setImage(pokeDataForState.frontImage)} style={{
                 height: '96px', width: '96px',
-                backgroundImage: `${pokeDataForState.frontImage}`
+                backgroundImage: `${image || pokeDataForState.frontImage}`
             }} ></div>
             <ul>{pokemonList}</ul>
             <button className="Catch-release" onClick={() => { catchOrRelease(catchState, pokeDataForState.pokeName) }}>{catchButton}</button>
