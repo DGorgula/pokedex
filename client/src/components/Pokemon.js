@@ -6,19 +6,22 @@ const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrReleas
         setFrontImage(setImage, image, pokeDataForState.frontImage, pokeDataForState.backImage);
     }
     return (
-        <div className="stats">
-            <p>Name: {pokeDataForState.pokeName}</p>
-            <p>Types:{spreadTypes(pokeDataForState.pokeTypes)}</p>
-            <p>Height: {pokeDataForState.pokeHeight}</p>
-            <p>Weight: {pokeDataForState.pokeWeight}</p>
-            <div onMouseOver={() => setImage(pokeDataForState.backImage)} onMouseLeave={() => setImage(pokeDataForState.frontImage)} style={{
-                height: '96px', width: '96px',
-                backgroundImage: `url("${image || pokeDataForState.frontImage}")`
-            }} ></div>
-            <ul>{pokemonTypeList}</ul>
-            <button className="Catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName, catchButton, pokeDataForState.pokeId) }}>{catchButton}</button>
-
+        <>
+        <div id="main-data">
+            <div className="stats">
+                <p>Name: {pokeDataForState.pokeName}</p>
+                <p>Types:{spreadTypes(pokeDataForState.pokeTypes)}</p>
+                <p>Height: {pokeDataForState.pokeHeight}</p>
+                <p>Weight: {pokeDataForState.pokeWeight}</p>
+                </div>
+                    <div className="main-image" onMouseOver={() => setImage(pokeDataForState.backImage)} onMouseLeave={() => setImage(pokeDataForState.frontImage)} style={{
+                    width: '200px', height: "200px", backgroundSize: "200px", backgroundRepeat: 'no-repeat' , backgroundImage: `url("${image || pokeDataForState.frontImage}")`
+                    }} >
+                    <button className="catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName, catchButton, pokeDataForState.pokeId) }}>{catchButton}</button>
+                <ul>{pokemonTypeList}</ul>
+            </div>
         </div>
+</>
     )
 }
 

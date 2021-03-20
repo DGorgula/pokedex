@@ -1,87 +1,172 @@
-body{
-    background-size: contain;
-    background-repeat: no-repeat;
-    text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
-.type{
-    border-radius:0.6rem;
-    padding: 0.4rem;
-    color:white;
-    /* font-weight: bold; */
-    font-family:'Fira Sans';
+
+body {
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
+
+#main-data {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.catch-release {
+  background-color: #525252;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 7px;
+}
+
+.flexcontainer {
+  -webkit-box-ordinal-group: 1;
+      -ms-flex-order: 0;
+          order: 0;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
+  -ms-flex-item-align: auto;
+      -ms-grid-row-align: auto;
+      align-self: auto;
+}
+
+.main-image {
+  -webkit-box-ordinal-group: 1;
+      -ms-flex-order: 0;
+          order: 0;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
+  -ms-flex-item-align: auto;
+      -ms-grid-row-align: auto;
+      align-self: auto;
+}
+
+.image {
+  height: '400px';
+  width: '400px';
+}
+
+/* .main-data{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+} */
+.type {
+  border-radius: 0.6rem;
+  padding: 0.4rem;
+  color: white;
+  /* font-weight: bold; */
+  font-family: 'Fira Sans';
+}
+
 .normal {
-    background-color: #aa9
+  background-color: #aa9;
 }
 
 .fire {
-    background-color: #f42
+  background-color: #f42;
 }
 
 .water {
-    background-color: #39f
+  background-color: #39f;
 }
 
 .electric {
-    background-color: #fc3
+  background-color: #fc3;
 }
 
 .grass {
-    background-color: #7c5
+  background-color: #7c5;
 }
 
 .ice {
-    background-color: #6cf
+  background-color: #6cf;
 }
 
 .fighting {
-    background-color: #b54
+  background-color: #b54;
 }
 
 .poison {
-    background-color: #a59
+  background-color: #a59;
 }
 
 .ground {
-    background-color: #db5
+  background-color: #db5;
 }
 
 .flying {
-    background-color: #89f
+  background-color: #89f;
 }
 
 .psychic {
-    background-color: #f59
+  background-color: #f59;
 }
 
 .bug {
-    background-color: #ab2
+  background-color: #ab2;
 }
 
 .rock {
-    background-color: #ba6
+  background-color: #ba6;
 }
 
 .ghost {
-    background-color: #66b
+  background-color: #66b;
 }
 
 .dragon {
-    background-color: #76e
+  background-color: #76e;
 }
 
 .dark {
-    background-color: #754
+  background-color: #754;
 }
 
 .steel {
-    background-color: #aab
+  background-color: #aab;
 }
 
 .fairy {
-    background-color: #e9e
+  background-color: #e9e;
 }
 
 .curse {
-    background-color: #698
+  background-color: #698;
 }
+/*# sourceMappingURL=pokemonType.css.map */
