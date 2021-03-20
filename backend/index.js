@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const catchState = {};
-let catchButton;
+let pokeCatchedButton;
 
 
 app.get('/', (req, res) => {
@@ -24,6 +24,15 @@ app.get('/api/collection', async (req, res, next) => {
     // console.log(collection)
 
     return res.json(collection);
+});
+app.get('/api/clear', (req, res, next) => {
+    return Pokemon.deleteMany({}).then((result) => {
+        console.log(result)
+        return res.status(200).send("deleted successfully")
+    }).catch((err) => {
+        return next(err)
+        return res.status(500).send("something went wrong... the error is :", err)
+    });
 });
 
 app.get('/api/:type', (req, res) => {
@@ -50,17 +59,10 @@ app.delete('/api/collection/release/:id', async (req, res) => {
         return res.status(500).json({ error: "there was a problem with the server" });
     }
     const catchedPokemon = fetchedPokemon[0];
+    const pokeCatchedButton = 'catch';
 
-    const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
-    console.log(updateStatus);
-
-    // const isCatched = catchState[pokemon];
-    // if (isCatched) {
-    catchButton = 'catch';
-    console.log(catchState)
-    delete catchState[catchedPokemon.pokeName];
-    console.log(catchState)
-    return res.json({ catchButton: catchButton, catchState: catchState });
+    const updateStatus = await catchedPokemon.updateOne({ pokeCatchedButton: pokeCatchedButton }, { new: true });
+    return res.json({ pokeCatchedButton: pokeCatchedButton });
 });
 
 app.post('/api/collection/catch', async (req, res) => {
@@ -75,25 +77,24 @@ app.post('/api/collection/catch', async (req, res) => {
     console.log(isCatched);
     const catchedPokemon = fetchedPokemon[0];
     if (isCatched) {
+        return res.status(404).send("not found");
 
-        const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
-        console.log(updateStatus);
+        // const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
+        // console.log(updateStatus);
 
-        // const isCatched = catchState[pokemon];
-        // if (isCatched) {
-        catchButton = 'catch';
-        console.log(catchState)
-        delete catchState[pokemon];
-        console.log(catchState)
-        return res.json({ catchButton: catchButton, catchState: catchState });
-        // const catchedPokemons = catchState.filter(catchedObject => catchedObject[pokemon] === true);
+        // // const isCatched = catchState[pokemon];
+        // // if (isCatched) {
+        // pokeCatchedButton = 'catch';
+        // console.log(catchState)
+        // delete catchState[pokemon];
+        // console.log(catchState)
+        // return res.json({ pokeCatchedButton: pokeCatchedButton, catchState: catchState });
+        // // const catchedPokemons = catchState.filter(catchedObject => catchedObject[pokemon] === true);
     } else {
-        const updateStatus = await catchedPokemon.updateOne({ pokeCatched: true })
+        const pokeCatchedButton = 'release';
+        const updateStatus = await catchedPokemon.updateOne({ pokeCatchedButton: pokeCatchedButton })
         console.log(updateStatus);
-
-        catchState[pokemon] = pokemon;
-        catchButton = 'release';
-        return res.json({ catchButton: catchButton, catchState: catchState });
+        return res.json({ pokeCatchedButton: pokeCatchedButton });
     }
 });
 
@@ -105,12 +106,12 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
         const pokeData = isPokemonInDB[0];
         console.log("FOUND WHAT I LOOKED FOR!!!!!!", pokeData);
         if (catchState[pokeData.pokeName]) {
-            catchButton = 'release';
+            pokeCatchedButton = 'release';
         }
         else {
-            catchButton = 'catch';
+            pokeCatchedButton = 'catch';
         }
-        const pokeDataForState = { pokeName: pokeData.pokeName, pokeTypes: pokeData.pokeTypes, pokeHeight: pokeData.pokeHeight, pokeWeight: pokeData.pokeWeight, frontImage: pokeData.pokeFrontImage, backImage: pokeData.pokeBackImage, catchButton: catchButton };
+        const pokeDataForState = { pokeId: pokeData._id, pokeName: pokeData.pokeName, pokeTypes: pokeData.pokeTypes, pokeHeight: pokeData.pokeHeight, pokeWeight: pokeData.pokeWeight, frontImage: pokeData.pokeFrontImage, backImage: pokeData.pokeBackImage, pokeCatchedButton: pokeCatchedButton };
         return res.json(pokeDataForState);
     }
 
@@ -124,8 +125,8 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
     });
     const pokeWeight = pokeData.weight;
     const pokeHeight = pokeData.height;
-    const frontImage = 'url("' + pokeData.sprites.front_default + '")';
-    const backImage = 'url("' + pokeData.sprites.back_default + '")';
+    const frontImage = pokeData.sprites.front_default;
+    const backImage = pokeData.sprites.back_default;
 
     const pokemon = new Pokemon({
         pokeName: pokeName,
@@ -134,18 +135,10 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
         pokeHeight: pokeHeight,
         pokeFrontImage: frontImage,
         pokeBackImage: backImage,
-        pokeCatched: false
     });
-    pokemon.save().then(res => console.log("sent", res)).catch(err => console.log("error sending", err));
+    const save = await pokemon.save(({ new: true }));
 
-
-    if (catchState[pokeName]) {
-        catchButton = 'release';
-    }
-    else {
-        catchButton = 'catch';
-    }
-    const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, catchButton: catchButton };
+    const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: 'catch' };
     return res.json(pokeDataForState);
 });
 

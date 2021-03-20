@@ -24,9 +24,9 @@ const pokemonSchema = new mongoose.Schema({
     pokeBackImage: {
         type: String
     },
-    pokeCatched: {
-        type: Boolean,
-        default: false
+    pokeCatchedButton: {
+        type: String,
+        default: "catch"
     }
 });
 

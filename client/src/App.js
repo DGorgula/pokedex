@@ -6,28 +6,50 @@ import CatchedPokemons from './components/CatchedPokemons';
 
 function App() {
   const [pokemonTypeList, setpokemonTypeList] = useState('');
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('')
   const [catchState, setCatchState] = useState([]);
-  const [catchedPokemons, setCatchedPokemons] = useState([]);
+  const [catchedPokemons, setCatchedPokemons] = useState(catchedPokemonList());
   const [catchButton, setCatchButton] = useState('catch');
-  function catchedPokemonList(setCatchState) {
+
+  function catchedPokemonList(setCatchedPokemons) {
     axios.get(`http://localhost:3005/api/collection`).then(({ data }) => {
       console.log(data);
+      const catchedPokemonsElements = data.map(pokemon => {
+        return (
+          <img src={pokemon.pokeFrontImage} onClick={() => getPokemonData(pokemon.pokeName)} />
+        )
+      })
+      if (setCatchedPokemons) {
+        setCatchedPokemons(catchedPokemonsElements);
+        return;
+      }
+      return catchedPokemonsElements;
       // const x = data.frontImage;
       // const y = data.pokeName;
     })
   }
-  // catchedPokemonList(setCatchState);
-  function catchOrRelease(pokemonName) {
+  function catchOrRelease(pokemonName, catchButton, pokeId) {
     console.log(pokemonName);
-    axios.post(`http://localhost:3005/api/collection/catch`, { name: pokemonName })
-      .then(({ data }) => {
-        console.log(data);
-        setCatchButton(data.catchButton);
+    if (catchButton === 'catch') {
+
+      axios.post(`http://localhost:3005/api/collection/catch`, { name: pokemonName })
+        .then(({ data }) => {
+          console.log(data);
+          setCatchButton(data.pokeCatchedButton);
+          catchedPokemonList(setCatchedPokemons);
+          console.log(catchedPokemons);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    else {
+      axios.delete(`http://localhost:3005/api/collection/release/${pokeId}`, { name: pokemonName }).then((data) => {
+        setCatchButton("catch");
+        catchedPokemonList(setCatchedPokemons);
+        console.log(catchedPokemons);
       })
-      .catch(error => {
-        console.log(error);
-      });
+    }
   }
 
   const changeValue = (e) => {
@@ -46,7 +68,7 @@ function App() {
     axios.get(`http://localhost:3005/api/pokemon/${pokeName}`)
       .then(({ data }) => {
         console.log(data);
-        setCatchButton(data.catchButton);
+        setCatchButton(data.pokeCatchedButton);
         setPokeDataForState(data);
       })
       .catch(error => {
@@ -89,7 +111,7 @@ function App() {
       <h1>Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
       <Pokemon pokeDataForState={pokeDataForState} pokemonTypeList={pokemonTypeList} spreadTypes={spreadTypes} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
-      <CatchedPokemons catchedPokemons={catchedPokemons} setCatchedPokemons={setCatchedPokemons} setCatchState={setCatchState} catchState={catchState} />
+      <CatchedPokemons catchedPokemons={catchedPokemons} setCatchedPokemons={setCatchedPokemons} setCatchState={setCatchState} catchState={catchState} catchedPokemonList={catchedPokemonList} />
     </div>
   );
 

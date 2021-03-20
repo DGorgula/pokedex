@@ -3,11 +3,12 @@ https://pokeapi.co/api/v2/type/ground
 ###
 https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118
 
-###
-https://pokeapi.co/api/v2/pokemon/pikachu
 
 ###
 https://pokeapi.co/api/v2/pokemon/
 
 ###
-DELETE http://localhost:3005/api/collection/release/605552dacee86f3364f526a7
+DELETE http://localhost:3005/api/collection/release/6055516e17423432c4e4d6e6
+
+###
+http://localhost:3005/api/pokemon/raichu
