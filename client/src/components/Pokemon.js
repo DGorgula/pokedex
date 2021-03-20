@@ -5,6 +5,33 @@ const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrReleas
     if (pokeDataForState.frontImage) {
         setFrontImage(setImage, image, pokeDataForState.frontImage, pokeDataForState.backImage);
     }
+    function getImage() {
+
+        if (pokeDataForState.pokeName === "pokeugly") {
+            return ""
+        }
+        return image || pokeDataForState.frontImage
+
+    }
+
+    function imgAndButton() {
+        if (pokeDataForState.pokeName === "pokeugly") {
+            return
+        }
+        return (
+            <>
+                <div className="main-image" onMouseOver={() => setImage(pokeDataForState.backImage)} onMouseLeave={() => setImage(pokeDataForState.frontImage)} style={{
+                    width: '200px', height: "200px", backgroundSize: "200px", backgroundRepeat: 'no-repeat', backgroundImage: `url("${getImage()}")`
+                }} >
+                    <button className="catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName, catchButton, pokeDataForState.pokeId) }}>{catchButton}</button>
+                </div>
+
+            </>)
+    }
+
+
+
+
 
     return (
         <>
@@ -25,13 +52,12 @@ const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrReleas
                         <p id="weight-value" className="property">{pokeDataForState.pokeWeight ? pokeDataForState.pokeWeight + " Kg" : ""}</p>
                     </div>
                 </div>
-                <div className="main-image" onMouseOver={() => setImage(pokeDataForState.backImage)} onMouseLeave={() => setImage(pokeDataForState.frontImage)} style={{
-                    width: '200px', height: "200px", backgroundSize: "200px", backgroundRepeat: 'no-repeat', backgroundImage: `url("${image || pokeDataForState.frontImage}")`
-                }} >
-                    <button className="catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName, catchButton, pokeDataForState.pokeId) }}>{catchButton}</button>
+                {imgAndButton()}
+                <div>
+                    {pokeDataForState.pokemonUgly ? pokeDataForState.pokemonUgly : ''}
                 </div>
             </div>
-            <ul id="type-list">{pokemonTypeList}</ul>
+
         </>
     )
 }

@@ -12,7 +12,8 @@ function App() {
   const [catchState, setCatchState] = useState([]);
   const [catchedPokemons, setCatchedPokemons] = useState(catchedPokemonList());
   const [catchButton, setCatchButton] = useState('catch');
-
+  const [type, setType] = useState('');
+  const [pokemonUgly, setpokemonUgly] = useState(WebcamComponent)
   function catchedPokemonList(setCatchedPokemons) {
     axios.get(`http://localhost:3005/api/collection`).then(({ data }) => {
       console.log(data);
@@ -26,8 +27,6 @@ function App() {
         return;
       }
       return catchedPokemonsElements;
-      // const x = data.frontImage;
-      // const y = data.pokeName;
     })
   }
 
@@ -67,6 +66,7 @@ function App() {
 
   const getPokemonData = (value) => {
     setpokemonTypeList('')
+    setType('');
     if (!value) {
       return;
     }
@@ -75,14 +75,22 @@ function App() {
       .then(({ data }) => {
         console.log(data);
         setCatchButton(data.pokeCatchedButton);
+        if (data.pokeName === "pokeugly") {
+          setImage('');
+          setpokemonUgly(WebcamComponent)
+          data["pokemonUgly"] = pokemonUgly;
+        } else {
+          data["pokemonUgly"] = "";
+          // data["pokemonUgly"] = pokemonUgly;
+
+        }
+        console.log(data)
         setPokeDataForState(data);
       })
       .catch(error => {
         console.log(error)
         if (error.message === "Request failed with status code 404"
         ) {
-          console.log("GET INSIDE", error.message);
-          return setCatchButton(WebcamComponent);
         }
 
       });
@@ -100,7 +108,7 @@ function App() {
   function showTypePokemons(type) {
     axios.get(`http://localhost:3005/api/${type}`).then(({ data }) => {
       const pokemonTypeList = data.map((pokeName, i) => {
-        return (<li key={i} onClick={() => getPokemonData(pokeName)}>{pokeName}</li>)
+        return (<li key={i} className={"pokemon"} onClick={() => getPokemonData(pokeName)}>{pokeName}</li>)
       })
       setpokemonTypeList(pokemonTypeList);
     })
@@ -110,7 +118,7 @@ function App() {
       return;
     }
     const spans = types.map((type, index) => {
-      return <span className={"type " + type} onClick={() => showTypePokemons(type)} key={index}>{type}</span>
+      return <span className={"type " + type} onClick={() => { showTypePokemons(type); setType(type) }} key={index}>{type}</span>
     });
 
     return spans;
@@ -119,8 +127,14 @@ function App() {
     <div className="App">
       <h1 id="title">Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
-      <Pokemon pokeDataForState={pokeDataForState} pokemonTypeList={pokemonTypeList} spreadTypes={spreadTypes} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
+      <Pokemon setpokemonUgly={setpokemonUgly} pokemonUgly={pokemonUgly} pokeDataForState={pokeDataForState} pokemonTypeList={pokemonTypeList} spreadTypes={spreadTypes} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
       <CatchedPokemons catchedPokemons={catchedPokemons} setCatchedPokemons={setCatchedPokemons} setCatchState={setCatchState} catchState={catchState} catchedPokemonList={catchedPokemonList} />
+      {console.log(pokemonTypeList)}
+      <ul id="type-list" className={type}>
+        <h2 id="type-list-title">more {type} pokemons:</h2>
+        {pokemonTypeList}
+      </ul>
+
     </div>
   );
 

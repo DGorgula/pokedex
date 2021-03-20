@@ -111,7 +111,7 @@ img:after {
 }
 .webcam{
     margin: 0;
-    width: 7rem;
+    width: 18rem;
 }
 .collection{
     display: flex;
@@ -126,11 +126,26 @@ img:after {
 .collection::-webkit-scrollbar {
     display: none;
 }
+#type-list-title{
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+    margin: 2rem;
+}
 #type-list{
-    display: grid;
+    padding: 2rem 6rem 4rem 6rem;
+    display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 
+}
+.pokemon {
+    color: white;
+    width:fit-content;
+    font-weight: bold;
+    margin: 1rem;
+    list-style: none;
 }
 #types-value{
     display: flex;
@@ -221,4 +236,14 @@ img:after {
 
 .curse {
     background-color: #698
+}
+.ugly {
+    background-color: rgb(116, 73, 9)
+}
+
+
+@media (max-width: 768px){
+    #main-data {
+        flex-direction: column-reverse;
+    }
 }

@@ -33,8 +33,6 @@ app.get('/api/clear', (req, res, next) => {
 app.get('/api/:type', async (req, res) => {
     const { type } = req.params
     try {
-
-        // const pokemonsArr = []
         const { data } = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
         const pokemonsArr = data.pokemon.map((obj, i) => {
             return obj.pokemon.name;
@@ -122,7 +120,9 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
     } catch (error) {
         console.log("error of not found pokemon", error.message);
         if (error.message === "Request failed with status code 404") {
-            res.status(404).json({ status: 404, message: error.message });
+            const pokeDataForState = { pokeName: "pokeugly", pokeTypes: ["ugly"], pokeHeight: "1.50", pokeWeight: "300", frontImage: "", backImage: "", pokeCatchedButton: "" };
+
+            return res.status(200).json(pokeDataForState);
         }
         return next(error.message)
     }
