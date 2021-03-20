@@ -19,9 +19,9 @@ const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrReleas
                     width: '200px', height: "200px", backgroundSize: "200px", backgroundRepeat: 'no-repeat' , backgroundImage: `url("${image || pokeDataForState.frontImage}")`
                     }} >
                     <button className="catch-release" onClick={() => { catchOrRelease(pokeDataForState.pokeName, catchButton, pokeDataForState.pokeId) }}>{catchButton}</button>
-                <ul>{pokemonTypeList}</ul>
             </div>
         </div>
+                <ul>{pokemonTypeList}</ul>
 </>
     )
 }

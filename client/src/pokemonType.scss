@@ -10,6 +10,7 @@ body{
     display:flex;
     justify-content: center;
 }
+
 #main-data {
     width: fit-content;
     display: flex;
@@ -56,7 +57,39 @@ body{
 
 }
 .catch-release{
-
+    
+}
+img:before, 
+img:after { 
+    content: ""; 
+    flex: 1 1; 
+    border-bottom: 2px solid #000; 
+    margin: auto; 
+} 
+.catched-pokemon{
+    // 
+    border: 0.2rem solid black;
+    border-radius: 50%;
+    margin: 0.2rem;
+    // border-image: linear-gradient(90deg, #bd1833 50%, #fafafa 50%);
+    // height: 100%;
+    // background-size: 47%, 6%, 47%;
+    background: linear-gradient(180deg, #fb3431 47%, #000000 6%, #fafafa 47%);
+    
+}
+.webcam{
+    margin: 0;
+    width: 7rem;
+}
+.collection{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    width: 110px;
+    height: 100vh;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
 }
 
 .type{

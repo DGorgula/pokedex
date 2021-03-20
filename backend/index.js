@@ -57,7 +57,6 @@ app.delete('/api/collection/release/:id', async (req, res) => {
 
 app.post('/api/collection/catch', async (req, res) => {
     const pokemon = req.body.name;
-
     const fetchedPokemon = await Pokemon.find({ pokeName: pokemon })    // , pokeCatched = true 
     if (!fetchedPokemon[0]) {
         return res.status(500).json({ error: "there was a problem with the server" });
@@ -115,14 +114,19 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
 
     const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: save.pokeCatchedButton };
     return res.json(pokeDataForState);
-    } catch{
-    (error)=> { return next(error) }
-    } 
+    } catch(error){
+        console.log("error of not found pokemon", error.message);
+        if (error.message === "Request failed with status code 404") { 
+            res.status(404).json({ status: 404, message: error.message });
+        }
+            return next(error.message)
+        }
+    
 
 });
 
 function errorHandler(error, req, res, next) {
-    res.json({ errorFrom: "errorHandler", error: error })
+    res.status(500).json({ errorFrom: "errorHandler", error: error.message })
 
     next(error);
 }

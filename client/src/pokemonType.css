@@ -86,6 +86,45 @@ body {
     align-items: center;
     flex-direction: row;
 } */
+img:before,
+img:after {
+  content: "";
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1;
+          flex: 1 1;
+  border-bottom: 2px solid #000;
+  margin: auto;
+}
+
+.catched-pokemon {
+  border: 0.2rem solid black;
+  border-radius: 50%;
+  margin: 0.2rem;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(47%, #fb3431), color-stop(6%, #000000), color-stop(47%, #fafafa));
+  background: linear-gradient(180deg, #fb3431 47%, #000000 6%, #fafafa 47%);
+}
+
+.webcam {
+  margin: 0;
+  width: 7rem;
+}
+
+.collection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow: scroll;
+  width: 110px;
+  height: 100vh;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
 .type {
   border-radius: 0.6rem;
   padding: 0.4rem;

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import PokeFilter from './components/PokeFilter';
 import Pokemon from './components/Pokemon';
 import CatchedPokemons from './components/CatchedPokemons';
+import Webcam from "react-webcam";
+const WebcamComponent = () => <Webcam className="webcam" />;
 
 function App() {
   const [pokemonTypeList, setpokemonTypeList] = useState('');
@@ -16,7 +18,7 @@ function App() {
       console.log(data);
       const catchedPokemonsElements = data.map(pokemon => {
         return (
-          <img src={pokemon.pokeFrontImage} onClick={() => getPokemonData(pokemon.pokeName)} />
+          <img className="catched-pokemon" src={pokemon.pokeFrontImage} onClick={() => getPokemonData(pokemon.pokeName)} />
         )
       })
       if (setCatchedPokemons) {
@@ -41,7 +43,10 @@ function App() {
           console.log(catchedPokemons);
         })
         .catch(error => {
-          console.log(error);
+          console.log("EROR",error)
+
+          console.log(error)
+          ;
         });
     }
     else {
@@ -73,7 +78,12 @@ function App() {
         setPokeDataForState(data);
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
+        if(error.message === "Request failed with status code 404"
+          ){
+          console.log("GET INSIDE",error.message);
+          return  setCatchButton(WebcamComponent);
+        }
 
       });
   }
@@ -86,8 +96,6 @@ function App() {
       setImage(frontImage);
     }
   }
-
-
 
   function showTypePokemons(type) {
     axios.get(`http://localhost:3005/api/${type}`).then(({ data }) => {
