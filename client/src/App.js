@@ -43,10 +43,10 @@ function App() {
           console.log(catchedPokemons);
         })
         .catch(error => {
-          console.log("EROR",error)
+          console.log("EROR", error)
 
           console.log(error)
-          ;
+            ;
         });
     }
     else {
@@ -79,10 +79,10 @@ function App() {
       })
       .catch(error => {
         console.log(error)
-        if(error.message === "Request failed with status code 404"
-          ){
-          console.log("GET INSIDE",error.message);
-          return  setCatchButton(WebcamComponent);
+        if (error.message === "Request failed with status code 404"
+        ) {
+          console.log("GET INSIDE", error.message);
+          return setCatchButton(WebcamComponent);
         }
 
       });
@@ -110,14 +110,14 @@ function App() {
       return;
     }
     const spans = types.map((type, index) => {
-      return <span className={"type "+type} onClick={() => showTypePokemons(type)} key={index}>{type}</span>
+      return <span className={"type " + type} onClick={() => showTypePokemons(type)} key={index}>{type}</span>
     });
 
     return spans;
   }
   return (
     <div className="App">
-      <h1>Pokedex</h1>
+      <h1 id="title">Pokedex</h1>
       <PokeFilter changeValue={changeValue} getPokemonData={getPokemonData} value={value} />
       <Pokemon pokeDataForState={pokeDataForState} pokemonTypeList={pokemonTypeList} spreadTypes={spreadTypes} catchOrRelease={catchOrRelease} catchButton={catchButton} setCatchButton={setCatchButton} setImage={setImage} image={image} setFrontImage={setFrontImage} />
       <CatchedPokemons catchedPokemons={catchedPokemons} setCatchedPokemons={setCatchedPokemons} setCatchState={setCatchState} catchState={catchState} catchedPokemonList={catchedPokemonList} />

@@ -3,20 +3,52 @@
     padding:0;
     box-sizing: border-box;
 }
-body{
-    background-size: contain;
+#app{
+    // background-size: contain;
+    width:100%;
     background-repeat: no-repeat;
     text-align: center;
     display:flex;
     justify-content: center;
 }
-
+#title{
+    text-align: center;
+    font-size: 3rem;
+    margin: 3rem 0 2rem 0 ;
+}
+#filter-div{
+text-align: center;
+}
+#filter{
+    height:2rem;
+    font-size:1rem;
+    padding-left: 0.3rem;
+    border-radius: 0.6rem;
+    margin-right: 0.5rem;
+    outline:none;
+    // text-align: center;
+}
+#filter-button:hover{
+cursor: pointer;
+}
+#filter-button{
+    // background-color: #fb3431;
+    display: inline-block;
+    border: none;
+    font-weight: bold;
+    font-size:1rem;
+    border-radius: 0.6rem;
+    outline: none;
+}
+.property {
+    margin: 2rem;
+}
 #main-data {
-    width: fit-content;
+    margin: 0 15rem;
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
     align-content: center;
     align-items: center;
     }
@@ -30,11 +62,7 @@ body{
     display: inline-block;
     font-size: 7px;
 }
-.flexcontainer {
-    order: 0;
-    flex: 0 1 auto;
-    align-self: auto;
-    }
+
 
 .main-image {
     order: 0;
@@ -54,7 +82,11 @@ body{
     flex-direction: row;
 } */
 .stats{
-
+display: flex;
+width: 30vw;
+}
+#values{
+    width: fit-content;
 }
 .catch-release{
     
@@ -83,21 +115,37 @@ img:after {
 }
 .collection{
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     overflow: scroll;
     width: 110px;
     height: 100vh;
-    position: fixed;
-    bottom: 1rem;
+    position: absolute;
+    bottom: 0;
     right: 1rem;
 }
+.collection::-webkit-scrollbar {
+    display: none;
+}
+#type-list{
+    display: grid;
+    flex-direction: row;
+    flex-wrap: nowrap;
 
+}
+#types-value{
+    display: flex;
+    flex-direction:row;
+}
 .type{
+    display: flex;
+    place-items: center;
     border-radius:0.6rem;
-    padding: 0.4rem;
+    margin-right: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    
+    width:fit-content;
     color:white;
-    /* font-weight: bold; */
-    font-family:'Fira Sans';
+    text-align: center;
 }
 .normal {
     background-color: #aa9

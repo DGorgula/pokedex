@@ -30,17 +30,22 @@ app.get('/api/clear', (req, res, next) => {
     });
 });
 
-app.get('/api/:type', (req, res) => {
+app.get('/api/:type', async (req, res) => {
     const { type } = req.params
+    try {
 
-    axios.get(`https://pokeapi.co/api/v2/type/${type}`)
-        .then(({ data }) => {
-            const pokemonsArr = data.pokemon.map((obj) => {
-                return obj.pokemon.name
-            })
-            res.json(pokemonsArr)
+        // const pokemonsArr = []
+        const { data } = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
+        const pokemonsArr = data.pokemon.map((obj, i) => {
+            return obj.pokemon.name;
         })
+        return res.json(pokemonsArr);
+
+    } catch (error) {
+        console.log("error in get url", error);
+    }
 });
+
 
 app.delete('/api/collection/release/:id', async (req, res) => {
     const pokemonId = req.params.id;
@@ -90,38 +95,38 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
         return res.json(pokeDataForState);
     }
     try {
-    const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    const pokeData = data;
-    const pokeName = pokeData.name;
-    const pokeTypes = pokeData.types.map(type => {
-        const typeName = type.type.name;
-        return `${typeName} `;
-    });
-    const pokeWeight = pokeData.weight;
-    const pokeHeight = pokeData.height;
-    const frontImage = pokeData.sprites.front_default;
-    const backImage = pokeData.sprites.back_default;
+        const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const pokeData = data;
+        const pokeName = pokeData.name;
+        const pokeTypes = pokeData.types.map(type => {
+            const typeName = type.type.name;
+            return `${typeName} `;
+        });
+        const pokeWeight = pokeData.weight;
+        const pokeHeight = pokeData.height;
+        const frontImage = pokeData.sprites.front_default;
+        const backImage = pokeData.sprites.back_default;
 
-    const pokemon = new Pokemon({
-        pokeName: pokeName,
-        pokeTypes: pokeTypes,
-        pokeWeight: pokeWeight,
-        pokeHeight: pokeHeight,
-        pokeFrontImage: frontImage,
-        pokeBackImage: backImage,
-    });
-    const save = await pokemon.save(({ new: true }));
+        const pokemon = new Pokemon({
+            pokeName: pokeName,
+            pokeTypes: pokeTypes,
+            pokeWeight: pokeWeight,
+            pokeHeight: pokeHeight,
+            pokeFrontImage: frontImage,
+            pokeBackImage: backImage,
+        });
+        const save = await pokemon.save(({ new: true }));
 
-    const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: save.pokeCatchedButton };
-    return res.json(pokeDataForState);
-    } catch(error){
+        const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: save.pokeCatchedButton };
+        return res.json(pokeDataForState);
+    } catch (error) {
         console.log("error of not found pokemon", error.message);
-        if (error.message === "Request failed with status code 404") { 
+        if (error.message === "Request failed with status code 404") {
             res.status(404).json({ status: 404, message: error.message });
         }
-            return next(error.message)
-        }
-    
+        return next(error.message)
+    }
+
 
 });
 
