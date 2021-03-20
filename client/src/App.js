@@ -101,7 +101,7 @@ function App() {
       return;
     }
     const spans = types.map((type, index) => {
-      return <span onClick={() => showTypePokemons(type)} key={index}>{type}</span>
+      return <span className={"type "+type} onClick={() => showTypePokemons(type)} key={index}>{type}</span>
     });
 
     return spans;
