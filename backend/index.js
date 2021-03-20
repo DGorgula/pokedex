@@ -1,17 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-require('dotenv').config()
+const Pokemon = require('./mongo.js');
 const morgan = require('morgan');
 const cors = require('cors');
 const axios = require('axios');
+require('dotenv/config')
 app.use(cors());
 app.use(express.json());
 
-const catchState = { "aron": true, "rattata": true };
+const catchState = {};
 let catchButton;
+
+
 app.get('/', (req, res) => {
-    res.send("blas")
+    console.log("a");
+    return res.send("blas")
+    console.log("b");
 });
 
 app.get('/api/collection', (req, res, next) => {
@@ -37,7 +41,10 @@ app.get('/api/collection', (req, res, next) => {
 });
 
 app.get('/api/:type', (req, res) => {
+    console.log("111");
     const { type } = req.params
+
+    console.log("API/TYPE", type);
     axios.get(`https://pokeapi.co/api/v2/type/${type}`)
         .then(({ data }) => {
             // console.log(data.pokemon)
@@ -52,6 +59,8 @@ app.get('/api/:type', (req, res) => {
 
 app.post('/api/collection/catch', (req, res) => {
     const pokemon = req.body.name;
+
+    console.log("API/COLLECTION/CATCH", pokemon);
     const isCatched = catchState[pokemon];
     if (isCatched) {
         catchButton = 'catch';
@@ -67,29 +76,56 @@ app.post('/api/collection/catch', (req, res) => {
     }
 });
 
-app.get('/api/pokemon/:name', (req, res) => {
+app.get('/api/pokemon/:name', async (req, res, next) => {
     console.log("in the route");
     const name = req.params.name;
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`).then(({ data }) => {
-        const pokeData = data;
-        const pokeName = pokeData.name;
-        const pokeTypes = pokeData.types.map(type => {
-            const typeName = type.type.name;
-            return `${typeName} `;
-        });
-        const pokeWeight = pokeData.weight;
-        const pokeHeight = pokeData.height;
-        const frontImage = 'url("' + pokeData.sprites.front_default + '")';
-        const backImage = 'url("' + pokeData.sprites.back_default + '")';
-        if (catchState[pokeName]) {
+    const isPokemonInDB = await Pokemon.find({ pokeName: name })
+    if (isPokemonInDB[0]) {
+        const pokeData = isPokemonInDB[0];
+        console.log("FOUND WHAT I LOOKED FOR!!!!!!", pokeData);
+        if (catchState[pokeData.pokeName]) {
             catchButton = 'release';
         }
         else {
             catchButton = 'catch';
         }
-        const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, catchButton: catchButton };
-        res.json(pokeDataForState);
+        const pokeDataForState = { pokeName: pokeData.pokeName, pokeTypes: pokeData.pokeTypes, pokeHeight: pokeData.pokeHeight, pokeWeight: pokeData.pokeWeight, frontImage: pokeData.pokeFrontImage, backImage: pokeData.pokeBackImage, catchButton: catchButton };
+        return res.json(pokeDataForState);
+    }
+
+    console.log("API/POKENOM/:NAME", name);
+    const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const pokeData = data;
+    const pokeName = pokeData.name;
+    const pokeTypes = pokeData.types.map(type => {
+        const typeName = type.type.name;
+        return `${typeName} `;
     });
+    const pokeWeight = pokeData.weight;
+    const pokeHeight = pokeData.height;
+    const frontImage = 'url("' + pokeData.sprites.front_default + '")';
+    const backImage = 'url("' + pokeData.sprites.back_default + '")';
+
+    const pokemon = new Pokemon({
+        pokeName: pokeName,
+        pokeTypes: pokeTypes,
+        pokeWeight: pokeWeight,
+        pokeHeight: pokeHeight,
+        pokeFrontImage: frontImage,
+        pokeBackImage: backImage,
+        pokeCatched: false
+    });
+    pokemon.save().then(res => console.log("sent", res)).catch(err => console.log("error sending", err));
+
+
+    if (catchState[pokeName]) {
+        catchButton = 'release';
+    }
+    else {
+        catchButton = 'catch';
+    }
+    const pokeDataForState = { pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, catchButton: catchButton };
+    return res.json(pokeDataForState);
 });
 
 function errorHandler(error, req, res, next) {

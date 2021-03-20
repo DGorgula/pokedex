@@ -17,7 +17,7 @@ function App() {
       // const y = data.pokeName;
     })
   }
-  catchedPokemonList(setCatchState);
+  // catchedPokemonList(setCatchState);
   function catchOrRelease(pokemonName) {
     console.log(pokemonName);
     axios.post(`http://localhost:3005/api/collection/catch`, { name: pokemonName })
@@ -45,6 +45,7 @@ function App() {
     const pokeName = value.toLowerCase();
     axios.get(`http://localhost:3005/api/pokemon/${pokeName}`)
       .then(({ data }) => {
+        console.log(data);
         setCatchButton(data.catchButton);
         setPokeDataForState(data);
       })
