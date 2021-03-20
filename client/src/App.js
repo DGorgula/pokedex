@@ -28,6 +28,7 @@ function App() {
       // const y = data.pokeName;
     })
   }
+
   function catchOrRelease(pokemonName, catchButton, pokeId) {
     console.log(pokemonName);
     if (catchButton === 'catch') {

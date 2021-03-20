@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import "../pokemonType.css"
 const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrRelease, catchState, catchButton, setFrontImage, image, setImage }) => {
 
     if (pokeDataForState.frontImage) {
         setFrontImage(setImage, image, pokeDataForState.frontImage, pokeDataForState.backImage);
     }
+
     return (
         <>
         <div id="main-data">

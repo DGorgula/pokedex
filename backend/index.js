@@ -13,21 +13,16 @@ let pokeCatchedButton;
 
 
 app.get('/', (req, res) => {
-    console.log("a");
     return res.send("blas")
-    console.log("b");
 });
 
 app.get('/api/collection', async (req, res, next) => {
-    console.log("in colections")
-    const collection = await Pokemon.find({ pokeCatched: true })
-    // console.log(collection)
+    const collection = await Pokemon.find({ pokeCatchedButton: "release" })
 
     return res.json(collection);
 });
 app.get('/api/clear', (req, res, next) => {
     return Pokemon.deleteMany({}).then((result) => {
-        console.log(result)
         return res.status(200).send("deleted successfully")
     }).catch((err) => {
         return next(err)
@@ -36,14 +31,10 @@ app.get('/api/clear', (req, res, next) => {
 });
 
 app.get('/api/:type', (req, res) => {
-    console.log("111");
     const { type } = req.params
 
-    console.log("API/TYPE", type);
     axios.get(`https://pokeapi.co/api/v2/type/${type}`)
         .then(({ data }) => {
-            // console.log(data.pokemon)
-            // console.log(data)
             const pokemonsArr = data.pokemon.map((obj) => {
                 return obj.pokemon.name
             })
@@ -53,7 +44,6 @@ app.get('/api/:type', (req, res) => {
 
 app.delete('/api/collection/release/:id', async (req, res) => {
     const pokemonId = req.params.id;
-    console.log("IN THE DELETE", pokemonId);
     const fetchedPokemon = await Pokemon.find({ _id: pokemonId });
     if (!fetchedPokemon[0]) {
         return res.status(500).json({ error: "there was a problem with the server" });
@@ -62,60 +52,45 @@ app.delete('/api/collection/release/:id', async (req, res) => {
     const pokeCatchedButton = 'catch';
 
     const updateStatus = await catchedPokemon.updateOne({ pokeCatchedButton: pokeCatchedButton }, { new: true });
-    return res.json({ pokeCatchedButton: pokeCatchedButton });
+    return res.json(updateStatus);
 });
 
 app.post('/api/collection/catch', async (req, res) => {
     const pokemon = req.body.name;
 
-    console.log("API/COLLECTION/CATCH", pokemon);
     const fetchedPokemon = await Pokemon.find({ pokeName: pokemon })    // , pokeCatched = true 
     if (!fetchedPokemon[0]) {
         return res.status(500).json({ error: "there was a problem with the server" });
     }
     const isCatched = fetchedPokemon[0].pokeCatched;
-    console.log(isCatched);
     const catchedPokemon = fetchedPokemon[0];
     if (isCatched) {
         return res.status(404).send("not found");
 
         // const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
-        // console.log(updateStatus);
 
         // // const isCatched = catchState[pokemon];
         // // if (isCatched) {
         // pokeCatchedButton = 'catch';
-        // console.log(catchState)
         // delete catchState[pokemon];
-        // console.log(catchState)
         // return res.json({ pokeCatchedButton: pokeCatchedButton, catchState: catchState });
         // // const catchedPokemons = catchState.filter(catchedObject => catchedObject[pokemon] === true);
     } else {
         const pokeCatchedButton = 'release';
         const updateStatus = await catchedPokemon.updateOne({ pokeCatchedButton: pokeCatchedButton })
-        console.log(updateStatus);
         return res.json({ pokeCatchedButton: pokeCatchedButton });
     }
 });
 
 app.get('/api/pokemon/:name', async (req, res, next) => {
-    console.log("in the route");
     const name = req.params.name;
     const isPokemonInDB = await Pokemon.find({ pokeName: name })
     if (isPokemonInDB[0]) {
         const pokeData = isPokemonInDB[0];
-        console.log("FOUND WHAT I LOOKED FOR!!!!!!", pokeData);
-        if (catchState[pokeData.pokeName]) {
-            pokeCatchedButton = 'release';
-        }
-        else {
-            pokeCatchedButton = 'catch';
-        }
-        const pokeDataForState = { pokeId: pokeData._id, pokeName: pokeData.pokeName, pokeTypes: pokeData.pokeTypes, pokeHeight: pokeData.pokeHeight, pokeWeight: pokeData.pokeWeight, frontImage: pokeData.pokeFrontImage, backImage: pokeData.pokeBackImage, pokeCatchedButton: pokeCatchedButton };
+        const pokeDataForState = { pokeId: pokeData._id, pokeName: pokeData.pokeName, pokeTypes: pokeData.pokeTypes, pokeHeight: pokeData.pokeHeight, pokeWeight: pokeData.pokeWeight, frontImage: pokeData.pokeFrontImage, backImage: pokeData.pokeBackImage, pokeCatchedButton: pokeData.pokeCatchedButton };
         return res.json(pokeDataForState);
     }
-
-    console.log("API/POKENOM/:NAME", name);
+    try {
     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const pokeData = data;
     const pokeName = pokeData.name;
@@ -138,8 +113,12 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
     });
     const save = await pokemon.save(({ new: true }));
 
-    const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: 'catch' };
+    const pokeDataForState = { pokeId: save._id, pokeName: pokeName, pokeTypes: pokeTypes, pokeHeight: pokeHeight, pokeWeight: pokeWeight, frontImage: frontImage, backImage: backImage, pokeCatchedButton: save.pokeCatchedButton };
     return res.json(pokeDataForState);
+    } catch{
+    (error)=> { return next(error) }
+    } 
+
 });
 
 function errorHandler(error, req, res, next) {
@@ -155,5 +134,4 @@ app.use((req, res) => {
 app.use(errorHandler);
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
-    console.log(`you are listening to ${PORT}`)
 })
