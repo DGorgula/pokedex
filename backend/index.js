@@ -18,26 +18,12 @@ app.get('/', (req, res) => {
     console.log("b");
 });
 
-app.get('/api/collection', (req, res, next) => {
-    const collection = { name: "Daniel" };
+app.get('/api/collection', async (req, res, next) => {
     console.log("in colections")
-
-    // for loop doesnt work - getting 404 not found in the axios request.
-    for (const property in catchState) {
-        console.log(property)
-        console.log(catchState)
-        axios.get(`https://pokeapi.co/api/v2/pokemon/${catchState[property]}`) // perhaps change needed in address.
-            .then(({ data }) => {
-                const frontImage = 'url("' + data.sprites.front_default + '")';
-                const pokeName = data.name;
-                collection[property] = { frontImage: frontImage, pokeName: pokeName }
-                console.log(collection)
-                return res.json(collection)
-            })
-            .catch(err => next(err))
-    }
+    const collection = await Pokemon.find({ pokeCatched: true })
     // console.log(collection)
-    return;
+
+    return res.json(collection);
 });
 
 app.get('/api/:type', (req, res) => {
@@ -56,23 +42,58 @@ app.get('/api/:type', (req, res) => {
         })
 });
 
+app.delete('/api/collection/release/:id', async (req, res) => {
+    const pokemonId = req.params.id;
+    console.log("IN THE DELETE", pokemonId);
+    const fetchedPokemon = await Pokemon.find({ _id: pokemonId });
+    if (!fetchedPokemon[0]) {
+        return res.status(500).json({ error: "there was a problem with the server" });
+    }
+    const catchedPokemon = fetchedPokemon[0];
 
-app.post('/api/collection/catch', (req, res) => {
+    const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
+    console.log(updateStatus);
+
+    // const isCatched = catchState[pokemon];
+    // if (isCatched) {
+    catchButton = 'catch';
+    console.log(catchState)
+    delete catchState[catchedPokemon.pokeName];
+    console.log(catchState)
+    return res.json({ catchButton: catchButton, catchState: catchState });
+});
+
+app.post('/api/collection/catch', async (req, res) => {
     const pokemon = req.body.name;
 
     console.log("API/COLLECTION/CATCH", pokemon);
-    const isCatched = catchState[pokemon];
+    const fetchedPokemon = await Pokemon.find({ pokeName: pokemon })    // , pokeCatched = true 
+    if (!fetchedPokemon[0]) {
+        return res.status(500).json({ error: "there was a problem with the server" });
+    }
+    const isCatched = fetchedPokemon[0].pokeCatched;
+    console.log(isCatched);
+    const catchedPokemon = fetchedPokemon[0];
     if (isCatched) {
+
+        const updateStatus = await catchedPokemon.updateOne({ pokeCatched: false })
+        console.log(updateStatus);
+
+        // const isCatched = catchState[pokemon];
+        // if (isCatched) {
         catchButton = 'catch';
         console.log(catchState)
         delete catchState[pokemon];
         console.log(catchState)
-        res.json({ catchButton: catchButton, catchState: catchState });
+        return res.json({ catchButton: catchButton, catchState: catchState });
         // const catchedPokemons = catchState.filter(catchedObject => catchedObject[pokemon] === true);
     } else {
+        const updateStatus = await catchedPokemon.updateOne({ pokeCatched: true })
+        console.log(updateStatus);
+
         catchState[pokemon] = pokemon;
         catchButton = 'release';
-        res.json({ catchButton: catchButton, catchState: catchState });
+        return res.json({ catchButton: catchButton, catchState: catchState });
     }
 });
 
@@ -136,7 +157,7 @@ function errorHandler(error, req, res, next) {
 
 
 app.use((req, res) => {
-    res.send("Didnt get any route");
+    res.status(404).send("Didnt get any route");
 })
 app.use(errorHandler);
 const PORT = process.env.PORT || 3005;
