@@ -1,11 +1,11 @@
 import React from 'react';
 
-const CatchedPokemons = ({ catchedPokemons }) => {
+const CatchedPokemons = ({ catchedPokemons, catchedPokemonList, setCatchedPokemons }) => {
 
     // const catchedPokemonsElements = catchedPokemons.map()
     return (
         <div className="collection">
-            {catchedPokemons}
+            {catchedPokemons ? catchedPokemons : catchedPokemonList(setCatchedPokemons)}
         </div>
     )
 }
