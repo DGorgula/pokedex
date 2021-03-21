@@ -4,16 +4,15 @@ const Pokemon = require('./mongo.js');
 const morgan = require('morgan');
 const cors = require('cors');
 const axios = require('axios');
-require('dotenv/config')
 app.use(cors());
 app.use(express.json());
+app.use(express.static('./client/build'));
 
-const catchState = {};
-let pokeCatchedButton;
+
 
 
 app.get('/', (req, res) => {
-    return res.send("blas")
+    res.sendFile(__dirname + '/index.html')
 });
 
 app.get('/api/collection', async (req, res, next) => {
