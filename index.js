@@ -66,7 +66,7 @@ app.get('/api/:type', (req, res, next) => {
 
             setTimeout(() => {
                 res.json(response);
-            }, 6000);
+            }, 8000);
 
             return;
 

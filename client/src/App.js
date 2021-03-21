@@ -119,7 +119,8 @@ function App() {
           <img key={i} className="pokemon-image" src={pokemon.frontImage} onClick={() => getPokemonData(pokemon.pokeName)} /></li>)
       })
       setpokemonTypeList(pokemonTypeList);
-    });
+    })
+      .catch((error) => { console.log("There was an error", error); })
   }
   function spreadTypes(types) {
     if (!types) {
