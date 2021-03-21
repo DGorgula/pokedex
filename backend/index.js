@@ -86,6 +86,10 @@ app.post('/api/collection/catch', async (req, res) => {
 
 app.get('/api/pokemon/:name', async (req, res, next) => {
     const name = req.params.name;
+    if (!name) {
+        return res.status(200).send("all good");
+    }
+
     const isPokemonInDB = await Pokemon.find({ pokeName: name })
     if (isPokemonInDB[0]) {
         const pokeData = isPokemonInDB[0];
