@@ -61,11 +61,14 @@ app.get('/api/:type', (req, res, next) => {
                     });
             }
 
+            // while (pokemonsArr.length > response.length) {
+            // }
+
             setTimeout(() => {
                 res.json(response);
-            }, 3500);
+            }, 6000);
 
-            return
+            return;
 
         })
         .catch(error => {
