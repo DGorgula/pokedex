@@ -91,13 +91,6 @@ width: 30vw;
 .catch-release{
     
 }
-img:before, 
-img:after { 
-    content: ""; 
-    flex: 1 1; 
-    border-bottom: 2px solid #000; 
-    margin: auto; 
-} 
 .catched-pokemon{
     // 
     border: 0.2rem solid black;
@@ -119,7 +112,7 @@ img:after {
     overflow: scroll;
     width: 110px;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 1rem;
 }
@@ -134,7 +127,7 @@ img:after {
     margin: 2rem;
 }
 #type-list{
-    padding: 2rem 6rem 4rem 6rem;
+    padding: 2rem 7.5rem 4rem 6rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

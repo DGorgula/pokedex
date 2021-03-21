@@ -142,24 +142,4 @@ function App() {
 
 }
 
-
-// axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118')
-//   .then(({ data }) => {
-//     const fetchedPokemonUrls = {};
-//     data.results.map((val) => {
-//       return (
-//         fetchedPokemonUrls[val.name] = val.url
-//       )
-//     });
-//     console.log(data);
-//     pokemonUrlsState(fetchedPokemonUrls);
-//   }
-//   )
-
-
-
-
-
-
-
 export default App;
