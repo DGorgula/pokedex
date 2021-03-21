@@ -15,7 +15,7 @@ function App() {
   const [type, setType] = useState('');
   const [pokemonUgly, setpokemonUgly] = useState(WebcamComponent)
   function catchedPokemonList(setCatchedPokemons) {
-    axios.get(`http://localhost:3005/api/collection`).then(({ data }) => {
+    axios.get(`/api/collection`).then(({ data }) => {
       console.log(data);
       const catchedPokemonsElements = data.map(pokemon => {
         return (
@@ -34,7 +34,7 @@ function App() {
     console.log(pokemonName);
     if (catchButton === 'catch') {
 
-      axios.post(`http://localhost:3005/api/collection/catch`, { name: pokemonName })
+      axios.post(`/api/collection/catch`, { name: pokemonName })
         .then(({ data }) => {
           console.log(data);
           setCatchButton(data.pokeCatchedButton);
@@ -49,7 +49,7 @@ function App() {
         });
     }
     else {
-      axios.delete(`http://localhost:3005/api/collection/release/${pokeId}`, { name: pokemonName }).then((data) => {
+      axios.delete(`/api/collection/release/${pokeId}`, { name: pokemonName }).then((data) => {
         setCatchButton("catch");
         catchedPokemonList(setCatchedPokemons);
         console.log(catchedPokemons);
@@ -71,7 +71,7 @@ function App() {
       return;
     }
     const pokeName = value.toLowerCase();
-    axios.get(`http://localhost:3005/api/pokemon/${pokeName}`)
+    axios.get(`/api/pokemon/${pokeName}`)
       .then(({ data }) => {
         console.log(data);
         setCatchButton(data.pokeCatchedButton);
@@ -106,7 +106,7 @@ function App() {
   }
 
   function showTypePokemons(type) {
-    axios.get(`http://localhost:3005/api/${type}`).then(({ data }) => {
+    axios.get(`/api/${type}`).then(({ data }) => {
       const pokemonTypeList = data.map((pokeName, i) => {
         return (<li key={i} className={"pokemon"} onClick={() => getPokemonData(pokeName)}>{pokeName}</li>)
       })
