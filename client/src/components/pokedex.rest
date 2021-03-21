@@ -12,3 +12,12 @@ DELETE http://localhost:3005/api/collection/release/6055516e17423432c4e4d6e6
 
 ###
 http://localhost:3005/api/pokemon/raichu
+
+###
+http://localhost:3005/api/electric
+
+###
+POST http://localhost:3005/api/images
+Content-Type: application/json
+
+{"pokeNames": ["pikachu","raichu","magnemite","magneton","voltorb","electrode","electabuzz","jolteon","zapdos","chinchou","lanturn","pichu","mareep","flaaffy","ampharos","elekid","raikou","electrike","manectric","plusle","minun","shinx","luxio","luxray","pachirisu","magnezone","electivire","rotom","blitzle","zebstrika","emolga","joltik","galvantula","tynamo","eelektrik","eelektross","stunfisk","thundurus-incarnate","zekrom","helioptile","heliolisk","dedenne","charjabug","vikavolt","togedemaru","tapu-koko","xurkitree","zeraora","yamper","boltund","toxel","toxtricity-amped","pincurchin","morpeko","dracozolt","arctozolt","regieleki","rotom-heat","rotom-wash","rotom-frost","rotom-fan","rotom-mow","thundurus-therian","ampharos-mega","manectric-mega","pikachu-rock-star","pikachu-belle","pikachu-pop-star","pikachu-phd","pikachu-libre","pikachu-cosplay","pikachu-original-cap","pikachu-hoenn-cap","pikachu-sinnoh-cap","pikachu-unova-cap","pikachu-kalos-cap","pikachu-alola-cap","raichu-alola","geodude-alola","graveler-alola","golem-alola","vikavolt-totem","oricorio-pom-pom","pikachu-partner-cap","togedemaru-totem","toxtricity-low-key","pikachu-gmax","toxtricity-amped-gmax","toxtricity-low-key-gmax"]}

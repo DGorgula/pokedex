@@ -29,18 +29,49 @@ app.get('/api/clear', (req, res, next) => {
     });
 });
 
-app.get('/api/:type', async (req, res) => {
-    const { type } = req.params
-    try {
-        const { data } = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
-        const pokemonsArr = data.pokemon.map((obj, i) => {
-            return obj.pokemon.name;
-        })
-        return res.json(pokemonsArr);
 
-    } catch (error) {
-        console.log("error in get url", error);
+function getTypePokemonImages(typePokemons) {
+
+    for (const pokemon of typePokemons) {
+
     }
+
+
+
+}
+
+app.get('/api/:type', (req, res, next) => {
+    const { type } = req.params
+    axios.get(`https://pokeapi.co/api/v2/type/${type}`)
+        .then(({ data }) => {
+
+
+            const pokemonsArr = data.pokemon.map((obj, i) => {
+                return obj.pokemon.name;
+            })
+            console.log(pokemonsArr.length);
+            const response = [];
+            for (const pokeName of pokemonsArr) {
+                axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
+                    .then(({ data: pokeData }) => {
+                        response.push({ pokeName: pokeName, frontImage: pokeData.sprites.front_default });
+                    })
+                    .catch((error) => {
+                        return next(error);
+                    });
+            }
+
+            setTimeout(() => {
+                res.json(response);
+            }, 3500);
+
+            return
+
+        })
+        .catch(error => {
+
+            console.log("error in get url", error);
+        });
 });
 
 
@@ -123,7 +154,7 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
     } catch (error) {
         console.log("error of not found pokemon", error.message);
         if (error.message === "Request failed with status code 404") {
-            const pokeDataForState = { pokeName: "pokeugly", pokeTypes: ["ugly"], pokeHeight: "1.50", pokeWeight: "300", frontImage: "", backImage: "", pokeCatchedButton: "" };
+            const pokeDataForState = { pokeName: "pokeugly", pokeTypes: ["ugly"], pokeHeight: "150", pokeWeight: "300", frontImage: "", backImage: "", pokeCatchedButton: "" };
 
             return res.status(200).json(pokeDataForState);
         }
@@ -134,6 +165,7 @@ app.get('/api/pokemon/:name', async (req, res, next) => {
 });
 
 function errorHandler(error, req, res, next) {
+    console.log("WWWOOOOWWWW, AND WE ARE OFF!!!");
     res.status(500).json({ errorFrom: "errorHandler", error: error.message })
 
     next(error);
@@ -141,6 +173,7 @@ function errorHandler(error, req, res, next) {
 
 
 app.use((req, res) => {
+    console.log("WWWOOOOWWWW, AND WE ARE ON!!!", req.params);
     res.status(404).send("Didnt get any route");
 })
 app.use(errorHandler);

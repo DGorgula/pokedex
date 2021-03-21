@@ -81,7 +81,6 @@ function App() {
           data["pokemonUgly"] = pokemonUgly;
         } else {
           data["pokemonUgly"] = "";
-          // data["pokemonUgly"] = pokemonUgly;
 
         }
         console.log(data)
@@ -99,20 +98,28 @@ function App() {
 
   const [image, setImage] = useState(pokeDataForState.frontImage);
 
-
   function setFrontImage(setImage, image, frontImage, backImage) {
     if (image !== frontImage && image !== backImage) {
       setImage(frontImage);
     }
   }
 
+  function getPokemonImage(pokeName) {
+    console.log("pokeName: ", pokeName);
+    axios.get(`/api/image/${pokeName}`, { pokeName: pokeName })
+      .then(({ data }) => {
+        console.log("DATA: ", data);
+      });
+  }
+
   function showTypePokemons(type) {
     axios.get(`/api/${type}`).then(({ data }) => {
-      const pokemonTypeList = data.map((pokeName, i) => {
-        return (<li key={i} className={"pokemon"} onClick={() => getPokemonData(pokeName)}>{pokeName}</li>)
+      const pokemonTypeList = data.map((pokemon, i) => {
+        return (<li key={i} className={"pokemon"}>
+          <img key={i} className="pokemon-image" src={pokemon.frontImage} onClick={() => getPokemonData(pokemon.pokeName)} /></li>)
       })
       setpokemonTypeList(pokemonTypeList);
-    })
+    });
   }
   function spreadTypes(types) {
     if (!types) {
