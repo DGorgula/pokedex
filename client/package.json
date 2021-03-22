@@ -13,7 +13,6 @@
     "react-webcam": "^5.2.3",
     "web-vitals": "^1.1.1"
   },
-  "proxy": "http://localhost:3005",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
