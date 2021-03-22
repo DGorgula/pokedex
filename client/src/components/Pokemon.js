@@ -48,7 +48,7 @@ const Pokemon = ({ pokeDataForState, pokemonTypeList, spreadTypes, catchOrReleas
                         <p id="types-value" className="property">
                             {spreadTypes(pokeDataForState.pokeTypes)}
                         </p>
-                        <p id="height-value" className="property">{pokeDataForState.pokeHeight ? pokeDataForState.pokeHeight + "cm" : ""}</p>
+                        <p id="height-value" className="property">{pokeDataForState.pokeHeight ? pokeDataForState.pokeHeight + "in" : ""}</p>
                         <p id="weight-value" className="property">{pokeDataForState.pokeWeight ? pokeDataForState.pokeWeight + "Kg" : ""}</p>
                     </div>
                 </div>

@@ -29,54 +29,21 @@ app.get('/api/clear', (req, res, next) => {
     });
 });
 
-
-function getTypePokemonImages(typePokemons) {
-
-    for (const pokemon of typePokemons) {
-
-    }
-
-
-
-}
-
-app.get('/api/:type', (req, res, next) => {
+app.get('/api/:type', async (req, res, next) => {
     const { type } = req.params
-    axios.get(`https://pokeapi.co/api/v2/type/${type}`)
-        .then(({ data }) => {
-
-
-            const pokemonsArr = data.pokemon.map((obj, i) => {
-                return obj.pokemon.name;
-            })
-            console.log(pokemonsArr.length);
-            const response = [];
-            for (const pokeName of pokemonsArr) {
-                axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
-                    .then(({ data: pokeData }) => {
-                        response.push({ pokeName: pokeName, frontImage: pokeData.sprites.front_default });
-                    })
-                    .catch((error) => {
-                        return next(error);
-                    });
-            }
-
-            // while (pokemonsArr.length > response.length) {
-            // }
-
-            setTimeout(() => {
-                res.json(response);
-            }, 8000);
-
-            return;
-
-        })
-        .catch(error => {
-
-            console.log("error in get url", error);
-        });
+    const { data: typeData } = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
+    const pokemonsArr = typeData.pokemon.map((obj, i) => {
+        return obj.pokemon.name;
+    });
+    const response = [];
+    for (const pokeName of pokemonsArr) {
+        const { data: pokeData } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeName}`);
+        response.push({ pokeName: pokeName, frontImage: pokeData.sprites.front_default });
+    }
+    console.log(response);
+    await Promise.all(response);
+    return res.json(response);
 });
-
 
 app.delete('/api/collection/release/:id', async (req, res) => {
     const pokemonId = req.params.id;
