@@ -35,14 +35,14 @@ app.get('/api/:type', async (req, res, next) => {
     const pokemonsArr = typeData.pokemon.map((obj, i) => {
         return obj.pokemon.name;
     });
-    const response = [];
-    for (const pokeName of pokemonsArr) {
-        const { data: pokeData } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeName}`);
-        response.push({ pokeName: pokeName, frontImage: pokeData.sprites.front_default });
-    }
-    console.log(response);
-    await Promise.all(response);
-    return res.json(response);
+    // const response = [];
+    // for (const pokeName of pokemonsArr) {
+    //     const { data: pokeData } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeName}`);
+    //     response.push({ pokeName: pokeName, frontImage: pokeData.sprites.front_default });
+    // }
+    // console.log(response);
+    // await Promise.all(response);
+    return res.json(pokemonsArr);
 });
 
 app.delete('/api/collection/release/:id', async (req, res) => {
