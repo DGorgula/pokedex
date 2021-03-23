@@ -116,7 +116,7 @@ function App() {
     axios.get(`/api/${type}`).then(({ data }) => {
       console.log(data);
       const pokemonTypeList = data.map((pokemon, i) => {
-        return (<li key={i} className={"pokemon"}>
+        return (<li key={i} className={"pokemon"} onClick={() => getPokemonData(pokemon)}>
           {pokemon}</li>)
         // <img key={i} className="pokemon-image" src={pokemon.frontImage} onClick={() => getPokemonData(pokemon)} />
       })
